@@ -123,13 +123,13 @@
         ></div>
         <div class="menu-layout">
           <div class="products" id="products" aria-live="polite"></div>
-          <aside class="cart-panel" id="cartPanel">
+          <aside class="cart-panel" id="cartPanel" role="dialog" aria-labelledby="cartModalHeading" tabindex="-1">
             <div class="cart-title">
               <div>
                 <span class="eyebrow dark"><span></span> SUA ESCOLHA</span>
-                <h3>Sacola <span id="cartCount">(0)</span></h3>
+                <h3 id="cartModalHeading">Sacola <span id="cartCount">(0)</span></h3>
               </div>
-              <span class="bag-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 12H4L5 8Zm4 0a3 3 0 0 1 6 0"/></svg></span>
+              <span class="bag-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 12H4L5 8Zm4 0a3 3 0 0 1 6 0"/></svg></span><button class="cart-modal-close" id="closeCart" type="button" aria-label="Fechar sacola"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
             </div>
             <div class="cart-items" id="cartItems">
               <div class="empty-cart">
@@ -343,6 +343,7 @@
       </div>
       <span>COPYRIGHT 2025 PONTILHÃO BURGUER</span>
     </footer>
+    <button class="cart-modal-backdrop" id="cartModalBackdrop" type="button" aria-label="Fechar sacola"></button>
     <div class="mobile-cart-bar" id="mobileCartBar">
       <span
         ><b id="mobileCount">0</b> itens

@@ -315,20 +315,44 @@ document.querySelector("#search").addEventListener("input", (event) => {
   renderProducts();
 });
 document.querySelector("#checkout").addEventListener("click", sendOrder);
-document
-  .querySelector("#headerCart")
-  .addEventListener("click", () =>
-    document
-      .querySelector("#cartPanel")
-      .scrollIntoView({ behavior: "smooth", block: "center" }),
-  );
-document
-  .querySelector("#mobileGoCart")
-  .addEventListener("click", () =>
-    document
-      .querySelector("#cartPanel")
-      .scrollIntoView({ behavior: "smooth", block: "center" }),
-  );
+const cartPanel = document.querySelector("#cartPanel");
+let cartModalTrigger = null;
+function openCart() {
+  if (!window.matchMedia("(max-width: 720px)").matches) {
+    cartPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  cartModalTrigger = document.activeElement;
+  document.body.classList.add("cart-modal-open");
+  cartPanel.setAttribute("aria-modal", "true");
+  cartPanel.removeAttribute("aria-hidden");
+  document.querySelector("#closeCart").focus();
+}
+function closeCart() {
+  document.body.classList.remove("cart-modal-open");
+  cartPanel.removeAttribute("aria-modal");
+  cartPanel.setAttribute("aria-hidden", "true");
+  if (cartModalTrigger) cartModalTrigger.focus();
+}
+const mobileCartQuery = window.matchMedia("(max-width: 720px)");
+if (mobileCartQuery.matches) {
+  cartPanel.setAttribute("aria-hidden", "true");
+}
+mobileCartQuery.addEventListener("change", (event) => {
+  document.body.classList.remove("cart-modal-open");
+  cartPanel.removeAttribute("aria-modal");
+  if (event.matches) cartPanel.setAttribute("aria-hidden", "true");
+  else cartPanel.removeAttribute("aria-hidden");
+});
+document.querySelector("#headerCart").addEventListener("click", openCart);
+document.querySelector("#mobileGoCart").addEventListener("click", openCart);
+document.querySelector("#closeCart").addEventListener("click", closeCart);
+document.querySelector("#cartModalBackdrop").addEventListener("click", closeCart);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && document.body.classList.contains("cart-modal-open")) {
+    closeCart();
+  }
+});
 document.querySelectorAll('input[name="fulfillment"]').forEach((input) =>
   input.addEventListener("change", () => {
     const isDelivery = input.value === "Entrega" && input.checked;
