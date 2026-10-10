@@ -611,6 +611,29 @@ p {
   color: #7b7569;
   margin: 7px 0 13px;
 }
+.delivery-fee-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 9px 0 12px;
+  padding: 11px 12px;
+  border: 1px solid #e5b638;
+  background: #fbf4df;
+  color: #51452b;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.delivery-fee-notice svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  fill: none;
+  stroke: #987823;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.delivery-fee-notice strong { display: block; color: #211e1d; }
 .checkout {
   background: #25854d;
   color: white;
@@ -1499,6 +1522,12 @@ body.dark-mode {
 .dark-mode .cart-footer small {
   color: #c0b8ac;
 }
+.dark-mode .delivery-fee-notice {
+  background: #3a3325;
+  border-color: #8d7025;
+  color: #e7dcc1;
+}
+.dark-mode .delivery-fee-notice strong { color: #fff4d7; }
 .dark-mode .empty-cart {
   color: #c0b8ac;
 }

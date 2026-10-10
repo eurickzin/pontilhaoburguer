@@ -26,6 +26,10 @@
       </a>
 
       <div class="admin-top-actions">
+        <button class="theme-button" id="adminThemeToggle" type="button" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+          MODO ESCURO
+        </button>
         <a class="preview-link" href="index.html">
           VER SITE
           <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -52,7 +56,7 @@
             ADICIONAR PRODUTO
           </button>
           <button class="button button-outline" id="exportMenu">
-            EXPORTAR CARDÁPIO
+            BAIXAR CARDÁPIO EM PDF
           </button>
         </div>
       </section>
@@ -83,24 +87,17 @@
       </section>
 
       <section class="catalog-section">
+        <div class="print-heading">
+          <img src="logopontilhao.png" alt="" />
+          <div><strong>PONTILHÃO BURGUER</strong><span>Cardápio</span></div>
+        </div>
         <div class="catalog-heading">
           <div>
             <span class="kicker"><i></i> SEU CARDÁPIO</span>
             <h2>Produtos</h2>
           </div>
 
-          <button class="text-button" id="importMenu">
-            IMPORTAR BACKUP
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 15V3m0 0L7 8m5-5 5 5M5 14v6h14v-6" />
-            </svg>
-            <input
-              type="file"
-              id="importFile"
-              accept="application/json,.json"
-              hidden
-            />
-          </button>
+          <span class="pdf-hint">Na próxima janela, escolha “Salvar como PDF”.</span>
         </div>
 
         <div class="toolbar">

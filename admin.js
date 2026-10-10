@@ -359,65 +359,35 @@ form.addEventListener("submit", async (event) => {
 });
 
 document.querySelector("#exportMenu").addEventListener("click", () => {
-  const backup = products.map((product) => ({
-    id: product.id,
-    name: product.name,
-    category: product.category,
-    price: product.price,
-    description: product.description,
-    image: product.image,
-    badge: product.badge,
-    active: product.active,
-  }));
-
-  const file = new Blob([JSON.stringify(backup, null, 2)], {
-    type: "application/json",
-  });
-
-  const url = URL.createObjectURL(file);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "pontilhao-cardapio-backup.json";
-  link.click();
-  URL.revokeObjectURL(url);
-
-  showToast("Backup do cardápio baixado.");
+  const search = document.querySelector("#productSearch");
+  const category = document.querySelector("#categoryFilter");
+  const status = document.querySelector("#statusFilter");
+  const previousTitle = document.title;
+  search.value = "";
+  category.value = "";
+  status.value = "active";
+  document.title = "Cardápio - Pontilhão Burguer";
+  render();
+  window.addEventListener("afterprint", () => {
+    status.value = "";
+    document.title = previousTitle;
+    render();
+  }, { once: true });
+  window.print();
 });
 
-document.querySelector("#importMenu").addEventListener("click", () => {
-  document.querySelector("#importFile").click();
-});
-
-document.querySelector("#importFile").addEventListener("change", async (event) => {
-  const file = event.target.files?.[0];
-  if (!file) return;
-
-  try {
-    const imported = JSON.parse(await file.text());
-
-    if (
-      !Array.isArray(imported) ||
-      imported.some((item) =>
-        !item ||
-        !item.name ||
-        !item.category ||
-        !Number.isFinite(Number(item.price))
-      )
-    ) {
-      throw new Error("Arquivo inválido.");
-    }
-
-    if (!window.confirm(
-      `Importar ${imported.length} produtos? Os produtos atuais serão substituídos.`
-    )) return;
-
-    showToast("Importação em lote não está habilitada nesta versão. Para evitar perda de dados, adicione os produtos pelo editor.");
-  } catch (error) {
-    console.error(error);
-    showToast("Não foi possível importar esse arquivo JSON.");
-  } finally {
-    event.target.value = "";
-  }
+const adminThemeToggle = document.querySelector("#adminThemeToggle");
+function setAdminTheme(dark) {
+  document.body.classList.toggle("admin-dark", dark);
+  adminThemeToggle.setAttribute("aria-pressed", String(dark));
+  adminThemeToggle.innerHTML = dark
+    ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 15.2A8.5 8.5 0 0 1 8.8 3.8 8.5 8.5 0 1 0 20.2 15.2Z"/></svg>MODO CLARO'
+    : '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>MODO ESCURO';
+  localStorage.setItem("pontilhao-admin-theme", dark ? "dark" : "light");
+}
+setAdminTheme(localStorage.getItem("pontilhao-admin-theme") === "dark");
+adminThemeToggle.addEventListener("click", () => {
+  setAdminTheme(!document.body.classList.contains("admin-dark"));
 });
 
 async function initAdmin() {
