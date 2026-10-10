@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171510" />
+    <meta
+      name="description"
+      content="Peça seu lanche favorito no Pontilhão Burguer. Monte seu pedido e envie pelo WhatsApp."
+    />
+    <title>Pontilhão Burguer — Sabor que atravessa</title>
+    <link rel="icon" type="image/png" href="logopontilhao.png" />
+    <link rel="apple-touch-icon" href="logopontilhao.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="site-header">
+      <div class="announcement">
+        <span class="pulse"></span>
+        <div class="hours-days">
+          <small>FUNCIONAMENTO</small><strong>TERÇA A DOMINGO</strong>
+        </div>
+        <span class="hours-time">18h <i>—</i> 23h</span
+        ><span class="announce-right"
+          >PEDIDOS E ATENDIMENTO <b>·</b> Feito na chapa, feito com
+          carinho.</span
+        >
+      </div>
+      <header class="topbar">
+        <a class="brand" href="#inicio" aria-label="Pontilhão Burguer, início"
+          ><img
+            class="brand-logo"
+            src="logopontilhao.png"
+            alt="Pontilhão Burguer"
+        /></a>
+        <nav class="desktop-nav">
+          <a href="#cardapio">Cardápio</a><a href="#sobre">Nossa casa</a>
+        </nav>
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Ativar modo escuro"
+          title="Ativar modo escuro"
+        >
+          <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"
+            /></svg
+          ><svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"
+            /></svg
+          ><span class="theme-label">MODO ESCURO</span>
+        </button>
+        <button class="header-cart" id="headerCart" aria-label="Abrir sacola">
+          SACOLA <span id="headerCount">0</span
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 8h14l1 12H4L5 8Zm4 0a3 3 0 0 1 6 0" />
+          </svg>
+        </button>
+      </header>
+    </div>
+    <main id="inicio">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow"><span></span> O SEU PRÓXIMO FAVORITO</div>
+          <h1>O sabor que<br />faz <em>parar</em> tudo.</h1>
+          <p>
+            Hambúrguer de verdade, preparado na chapa e sem atalhos. Escolha o
+            seu e deixa o resto com a gente.
+          </p>
+          <a class="hero-cta" href="#cardapio"
+            >ESCOLHER MEU BURGUER <span>↘</span></a
+          >
+          <div class="hero-note">
+            <span class="stars">★★★★★</span> Feito na hora. Do nosso jeito.
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="hero-ring"></div>
+          <img
+            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1100&q=85"
+            alt="Hambúrguer com queijo, alface e tomate"
+          />
+          <div class="hero-tag">Na chapa, <em>no capricho.</em></div>
+        </div>
+        <div class="hero-bottom">
+          <span>01 / 03</span><span class="hero-line"></span
+          ><span>DESLIZE PRA DESCOBRIR</span>
+        </div>
+      </section>
+      <section class="menu-section" id="cardapio">
+        <div class="section-top">
+          <div>
+            <div class="eyebrow dark"><span></span> FEITO PRA MATAR A FOME</div>
+            <h2>Cardápio <em>da casa</em></h2>
+          </div>
+          <div class="search-wrap">
+            <svg viewBox="0 0 24 24">
+              <circle cx="10.8" cy="10.8" r="6.8" />
+              <path d="m16 16 5 5" /></svg
+            ><input
+              id="search"
+              type="search"
+              placeholder="Tá procurando algo?"
+              aria-label="Buscar no cardápio"
+            />
+          </div>
+        </div>
+        <div
+          class="category-bar"
+          id="categories"
+          role="tablist"
+          aria-label="Categorias do cardápio"
+        ></div>
+        <div class="menu-layout">
+          <div class="products" id="products" aria-live="polite"></div>
+          <aside class="cart-panel" id="cartPanel">
+            <div class="cart-title">
+              <div>
+                <span class="eyebrow dark"><span></span> SUA ESCOLHA</span>
+                <h3>Sacola <span id="cartCount">(0)</span></h3>
+              </div>
+              <span class="bag-icon">↗</span>
+            </div>
+            <div class="cart-items" id="cartItems">
+              <div class="empty-cart">
+                <div class="empty-icon">＋</div>
+                <strong>Sua sacola tá esperando</strong
+                ><span>Escolha um lanche pra começar.</span>
+              </div>
+            </div>
+            <div class="order-details">
+              <h4>Seus dados para o pedido</h4>
+              <label for="customerName">Nome</label
+              ><input
+                id="customerName"
+                name="customerName"
+                type="text"
+                autocomplete="name"
+                placeholder="Como podemos te chamar?"
+                required
+              />
+              <fieldset class="choice-group">
+                <legend>Como prefere receber?</legend>
+                <label class="choice-option"
+                  ><input
+                    type="radio"
+                    name="fulfillment"
+                    value="Retirada no local"
+                    required
+                  /><span>Retirada no local</span></label
+                ><label class="choice-option"
+                  ><input
+                    type="radio"
+                    name="fulfillment"
+                    value="Entrega"
+                    required
+                  /><span>Entrega</span></label
+                >
+              </fieldset>
+              <div id="deliveryAddressWrap" hidden>
+                <label for="customerAddress">Endereço para entrega</label
+                ><input
+                  id="customerAddress"
+                  name="customerAddress"
+                  type="text"
+                  autocomplete="street-address"
+                  placeholder="Rua, número, bairro e complemento"
+                />
+              </div>
+              <fieldset class="choice-group">
+                <legend>Forma de pagamento</legend>
+                <label class="choice-option"
+                  ><input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Pix"
+                    required
+                  /><span>Pix</span></label
+                ><label class="choice-option"
+                  ><input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Dinheiro"
+                    required
+                  /><span>Dinheiro</span></label
+                ><label class="choice-option"
+                  ><input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Cartão"
+                    required
+                  /><span>Cartão</span></label
+                >
+              </fieldset>
+              <label for="orderNotes">Observações</label
+              ><textarea
+                id="orderNotes"
+                name="orderNotes"
+                rows="2"
+                placeholder="Algum detalhe sobre o pedido? (opcional)"
+              ></textarea>
+            </div>
+            <div class="cart-footer">
+              <div class="subtotal">
+                <span>Subtotal</span><strong id="subtotal">R$ 0,00</strong>
+              </div>
+              <p class="delivery-hint">A entrega é combinada pelo WhatsApp.</p>
+              <button class="checkout" id="checkout" disabled>
+                ENVIAR PEDIDO PELO WHATSAPP <span>↗</span></button
+              ><small>Você confirma seu pedido na próxima etapa.</small>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <section class="promise" id="sobre">
+        <span class="promise-star">✳</span>
+        <div>
+          <span>SEM PRESSA, SEM ATALHO</span>
+          <h2>Da chapa pra sua mesa.<br /><em>Simples assim.</em></h2>
+        </div>
+        <p>
+          Pão macio, carne suculenta e ingrediente fresco. A gente acredita que
+          o melhor lanche é aquele feito de verdade — e dá pra sentir em cada
+          mordida.
+        </p>
+        <a href="#cardapio">VEM PRO PONTILHÃO <span>↗</span></a>
+      </section>
+      <section class="contact-section" id="contato">
+        <div class="contact-heading">
+          <div class="eyebrow dark"><span></span> CHEGA MAIS</div>
+          <h2>Estamos por <em>aqui.</em></h2>
+        </div>
+        <div class="contact-grid">
+          <article class="contact-card">
+            <span class="contact-icon"
+              ><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" /></svg
+            ></span>
+            <div>
+              <small>ENCONTRE A GENTE</small>
+              <p>
+                Rua Bela Vista, 157 — Cidade Nova<br />Natal, Rio Grande do
+                Norte<br />59072-710
+              </p>
+              <a
+                href="https://maps.google.com/?q=Rua+Bela+Vista,+157,+Cidade+Nova,+Natal,+RN,+59072-710"
+                target="_blank"
+                rel="noopener noreferrer"
+                >VER NO MAPA <b>↗</b></a
+              >
+            </div>
+          </article>
+          <article class="contact-card">
+            <span class="contact-icon"
+              ><svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3 2" /></svg
+            ></span>
+            <div>
+              <small>HORÁRIO DE FUNCIONAMENTO</small>
+              <p>Terça a domingo<br />18h às 23h</p>
+              <span class="open-note"><i></i> A gente te espera</span>
+            </div>
+          </article>
+          <article class="contact-card contact-whatsapp">
+            <span class="contact-icon"
+              ><svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.6A8.5 8.5 0 1 1 20.5 11.5Z"
+                />
+                <path
+                  d="M8 8.2c.5 3 2.8 5.3 5.8 5.8l1-1.3 2 .8c-.2 1.4-1.4 2.2-2.9 2-3.8-.7-6.9-3.8-7.6-7.6-.2-1.5.6-2.7 2-2.9l.8 2L8 8.2Z"
+                /></svg
+            ></span>
+            <div>
+              <small>PEÇA PELO WHATSAPP</small>
+              <p>
+                <a
+                  href="https://wa.me/5584988011667"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >(84) 98801-1667 <b>↗</b></a
+                ><a
+                  href="https://wa.me/5584987152527"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >(84) 98715-2527 <b>↗</b></a
+                >
+              </p>
+              <span class="open-note">Fale com a gente por aqui</span>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a
+        class="brand footer-brand"
+        href="#inicio"
+        aria-label="Pontilhão Burguer, início"
+        ><img
+          class="brand-logo"
+          src="logopontilhao.png"
+          alt="Pontilhão Burguer" /></a
+      ><span>FEITO NA CHAPA. SERVIDO COM CARINHO.</span>
+      <div class="footer-links">
+        <a
+          href="https://www.instagram.com/pontilhaoburguer/"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle class="insta-dot" cx="18" cy="6" r="1" /></svg
+          ><span
+            ><b>@pontilhaoburguer</b
+            ><small>Instagram Pontilhão Burguer</small></span
+          ><i>↗</i></a
+        ><a
+          href="https://www.instagram.com/rkdigital.web/"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle class="insta-dot" cx="18" cy="6" r="1" /></svg
+          ><span
+            ><b>@rkdigital.web</b
+            ><small>Desenvolvido por RK Digital</small></span
+          ><i>↗</i></a
+        >
+      </div>
+      <span>© 2025 PONTILHÃO BURGUER</span>
+    </footer>
+    <div class="mobile-cart-bar" id="mobileCartBar">
+      <span
+        ><b id="mobileCount">0</b> itens
+        <strong id="mobileSubtotal">R$ 0,00</strong></span
+      ><button id="mobileGoCart">VER SACOLA <span>↗</span></button>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

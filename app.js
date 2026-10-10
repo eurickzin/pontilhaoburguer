@@ -1,0 +1,359 @@
+// Configure with the lanchonete's WhatsApp, including country and area code (digits only).
+const WHATSAPP_NUMBER = "5584988011667";
+
+const productsData = [
+  {
+    id: "bauru",
+    name: "Bauru",
+    category: "Hambúrgueres",
+    price: 9,
+    description:
+      "Pão, alface, tomate, hambúrguer industrial, queijo, presunto, ovo e molho especial.",
+    image: "assetspontilhao/bauru.png",
+  },
+  {
+    id: "x-bacon",
+    name: "X-Bacon",
+    category: "Hambúrgueres",
+    price: 13,
+    description:
+      "Pão, alface, tomate, bacon, hambúrguer industrial, queijo, presunto, ovo e molho especial.",
+    image: "assetspontilhao/xbacon.jpg",
+  },
+  {
+    id: "x-calabresa",
+    name: "X-Calabresa",
+    category: "Hambúrgueres",
+    price: 15,
+    description:
+      "Pão, alface, tomate, calabresa, hambúrguer industrial, queijo, presunto, ovo e molho especial.",
+    image: "assetspontilhao/xcalabresa.jpeg",
+  },
+  {
+    id: "x-tudo",
+    name: "X-Tudo",
+    category: "Hambúrgueres",
+    price: 15,
+    description:
+      "Pão, alface, tomate, bacon, hambúrguer industrial, queijo, presunto, ovo e molho especial.",
+    image: "assetspontilhao/xtudo.jpeg",
+  },
+  {
+    id: "torrada",
+    name: "Torrada",
+    category: "Lanches simples",
+    price: 5,
+    description: "Pão e queijo.",
+    image: "assetspontilhao/torrada.jpeg",
+  },
+  {
+    id: "misto",
+    name: "Misto",
+    category: "Lanches simples",
+    price: 5,
+    description: "Pão, queijo e presunto.",
+    image: "assetspontilhao/misto.jpeg",
+  },
+  {
+    id: "batata-frita",
+    name: "Batata frita",
+    category: "Porções",
+    price: 20,
+    description: "Porção de batata frita.",
+    image: "assetspontilhao/batatafrita.jpeg",
+  },
+  {
+    id: "coca-1l",
+    name: "Refrigerante 1L — Coca-Cola",
+    category: "Bebidas",
+    price: 9,
+    description: "Refrigerante Coca-Cola, 1 litro.",
+    image: "assetspontilhao/cocacola1litro.jpeg",
+  },
+  {
+    id: "pepsi-guarana-1l",
+    name: "Refrigerante 1L — Pepsi/Guaraná",
+    category: "Bebidas",
+    price: 8,
+    description:
+      "Escolha entre Pepsi ou Guaraná e informe a opção nas observações.",
+    image: "assetspontilhao/pepsi1litro.jpeg",
+  },
+  {
+    id: "refri-lata",
+    name: "Refrigerante lata",
+    category: "Bebidas",
+    price: 5,
+    description: "Refrigerante em lata. Informe o sabor nas observações.",
+    image: "assetspontilhao/refrigerantelata.jpeg",
+  },
+  {
+    id: "suco",
+    name: "Suco copo 300ml",
+    category: "Bebidas",
+    price: 3,
+    description: "Suco no copo de 300ml. Informe o sabor nas observações.",
+    image: "assetspontilhao/coposuco300ml.png",
+  },
+  {
+    id: "dore",
+    name: "Dore 250ml",
+    category: "Bebidas",
+    price: 3,
+    description: "Refrigerante Dore, 250ml.",
+    image: "assetspontilhao/dore250ml.jpg",
+  },
+  {
+    id: "heineken",
+    name: "Heineken long neck",
+    category: "Bebidas",
+    price: 8,
+    description: "Cerveja Heineken long neck.",
+    image: "assetspontilhao/heinekenlongnek.webp",
+  },
+  {
+    id: "budweiser",
+    name: "Budweiser long neck",
+    category: "Bebidas",
+    price: 7,
+    description: "Cerveja Budweiser long neck.",
+    image: "assetspontilhao/budweiserlongnek.webp",
+  },
+  {
+    id: "cerveja-lata",
+    name: "Cerveja lata",
+    category: "Bebidas",
+    price: 4,
+    description: "Cerveja em lata.",
+    image: "assetspontilhao/cerveja.jpeg",
+  },
+  {
+    id: "agua-gas",
+    name: "Água com gás",
+    category: "Bebidas",
+    price: 3,
+    description: "Água mineral com gás.",
+    image:
+      "https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=500&q=80",
+  },
+  {
+    id: "agua-sem-gas",
+    name: "Água sem gás",
+    category: "Bebidas",
+    price: 2,
+    description: "Água mineral sem gás.",
+    image:
+      "https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=500&q=80",
+  },
+];
+const categories = [
+  "Tudo",
+  "Hambúrgueres",
+  "Lanches simples",
+  "Porções",
+  "Bebidas",
+];
+const cart = new Map();
+let activeCategory = "Tudo";
+let searchTerm = "";
+const money = (value) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
+    value,
+  );
+const productsEl = document.querySelector("#products");
+function renderCategories() {
+  document.querySelector("#categories").innerHTML = categories
+    .map(
+      (cat) =>
+        `<button class="cat-btn ${cat === activeCategory ? "active" : ""}" role="tab" aria-selected="${cat === activeCategory}" data-category="${cat}">${cat}</button>`,
+    )
+    .join("");
+  document.querySelectorAll(".cat-btn").forEach(
+    (btn) =>
+      (btn.onclick = () => {
+        activeCategory = btn.dataset.category;
+        renderCategories();
+        renderProducts();
+      }),
+  );
+}
+function renderProducts() {
+  const filtered = productsData.filter(
+    (p) =>
+      (activeCategory === "Tudo" || p.category === activeCategory) &&
+      `${p.name} ${p.description} ${p.category}`
+        .toLowerCase()
+        .includes(searchTerm),
+  );
+  productsEl.innerHTML = filtered.length
+    ? filtered
+        .map(
+          (p) =>
+            `<article class="product-card">${p.badge ? `<span class="badge">${p.badge}</span>` : ""}<img class="product-photo" src="${p.image}" alt="${p.name}" loading="lazy"/><div class="product-info"><span class="product-category">${p.category}</span><h3>${p.name}</h3><p>${p.description}</p><div class="product-bottom"><span class="price">${money(p.price)}</span><button class="add-btn" aria-label="Adicionar ${p.name}" data-add="${p.id}">+</button></div></div></article>`,
+        )
+        .join("")
+    : '<div class="no-results">Não encontramos esse item. Tente outra busca.</div>';
+  document
+    .querySelectorAll("[data-add]")
+    .forEach((button) => (button.onclick = () => addItem(button.dataset.add)));
+}
+function addItem(id) {
+  const item = cart.get(id);
+  cart.set(id, { qty: (item?.qty || 0) + 1 });
+  renderCart();
+  showToast(
+    `${productsData.find((p) => p.id === id).name} adicionado à sacola`,
+  );
+}
+function changeQty(id, delta) {
+  const item = cart.get(id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart.delete(id);
+  renderCart();
+}
+function renderCart() {
+  const list = document.querySelector("#cartItems");
+  let total = 0,
+    count = 0;
+  const entries = [...cart.entries()];
+  if (!entries.length) {
+    list.innerHTML =
+      '<div class="empty-cart"><div class="empty-icon">＋</div><strong>Sua sacola tá esperando</strong><span>Escolha um lanche pra começar.</span></div>';
+  } else {
+    list.innerHTML = entries
+      .map(([id, { qty }]) => {
+        const product = productsData.find((p) => p.id === id);
+        total += qty * product.price;
+        count += qty;
+        return `<div class="cart-row"><span class="cart-row-name">${product.name}</span><span class="cart-row-price">${money(qty * product.price)}</span><div class="cart-row-controls"><div class="qty-control"><button aria-label="Remover uma unidade de ${product.name}" data-change="${id}" data-delta="-1">−</button><span>${qty}</span><button aria-label="Adicionar uma unidade de ${product.name}" data-change="${id}" data-delta="1">+</button></div><button class="remove-item" data-remove="${id}">remover</button></div></div>`;
+      })
+      .join("");
+  }
+  document.querySelector("#subtotal").textContent = money(total);
+  document.querySelector("#cartCount").textContent = `(${count})`;
+  document.querySelector("#headerCount").textContent = count;
+  document.querySelector("#mobileCount").textContent = count;
+  document.querySelector("#mobileSubtotal").textContent = money(total);
+  document.querySelector("#checkout").disabled = count === 0;
+  document
+    .querySelector("#mobileCartBar")
+    .classList.toggle("visible", count > 0);
+  list
+    .querySelectorAll("[data-change]")
+    .forEach(
+      (btn) =>
+        (btn.onclick = () =>
+          changeQty(btn.dataset.change, Number(btn.dataset.delta))),
+    );
+  list.querySelectorAll("[data-remove]").forEach(
+    (btn) =>
+      (btn.onclick = () => {
+        cart.delete(btn.dataset.remove);
+        renderCart();
+      }),
+  );
+}
+function sendOrder() {
+  if (!cart.size) return;
+  if (!document.querySelector("#customerName").reportValidity()) return;
+  const selectedFulfillment = document.querySelector(
+    'input[name="fulfillment"]:checked',
+  );
+  if (!selectedFulfillment) {
+    document.querySelector('input[name="fulfillment"]').reportValidity();
+    return;
+  }
+  const customerAddress = document.querySelector("#customerAddress");
+  if (
+    selectedFulfillment.value === "Entrega" &&
+    !customerAddress.reportValidity()
+  )
+    return;
+  const selectedPayment = document.querySelector(
+    'input[name="paymentMethod"]:checked',
+  );
+  if (!selectedPayment) {
+    document.querySelector('input[name="paymentMethod"]').reportValidity();
+    return;
+  }
+  const lines = [...cart.entries()].map(([id, { qty }]) => {
+    const p = productsData.find((item) => item.id === id);
+    return `- ${qty}x ${p.name} - ${money(p.price * qty)}`;
+  });
+  const total = [...cart.entries()].reduce(
+    (sum, [id, { qty }]) =>
+      sum + productsData.find((p) => p.id === id).price * qty,
+    0,
+  );
+  const customerName = document.querySelector("#customerName").value.trim();
+  const fulfillment = selectedFulfillment.value;
+  const paymentMethod = selectedPayment.value;
+  const orderNotes = document.querySelector("#orderNotes").value.trim();
+  const message = `🍔 NOVO PEDIDO - PONTILHAO BURGUER\n--------------------\n\n🧾 ITENS DO PEDIDO\n${lines.join("\n")}\n\n💰 TOTAL DOS ITENS: ${money(total)}\n--------------------\n\n👤 DADOS DO CLIENTE\nNome: ${customerName}\n${fulfillment === "Entrega" ? "📍" : "🏪"} Recebimento: ${fulfillment}${fulfillment === "Entrega" ? `\nEndereco: ${customerAddress.value.trim()}` : ""}\n💳 Pagamento: ${paymentMethod}\n📝 Observacoes: ${orderNotes || "Nenhuma"}`;
+  if (!WHATSAPP_NUMBER || WHATSAPP_NUMBER === "5585999999999") {
+    showToast("Configure o número do WhatsApp da lanchonete em app.js");
+    return;
+  }
+  window.open(
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+    "_blank",
+    "noopener,noreferrer",
+  );
+}
+let toastTimer;
+function showToast(text) {
+  const toast = document.querySelector("#toast");
+  toast.textContent = text;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+}
+document.querySelector("#search").addEventListener("input", (event) => {
+  searchTerm = event.target.value.trim().toLocaleLowerCase("pt-BR");
+  renderProducts();
+});
+document.querySelector("#checkout").addEventListener("click", sendOrder);
+document
+  .querySelector("#headerCart")
+  .addEventListener("click", () =>
+    document
+      .querySelector("#cartPanel")
+      .scrollIntoView({ behavior: "smooth", block: "center" }),
+  );
+document
+  .querySelector("#mobileGoCart")
+  .addEventListener("click", () =>
+    document
+      .querySelector("#cartPanel")
+      .scrollIntoView({ behavior: "smooth", block: "center" }),
+  );
+document.querySelectorAll('input[name="fulfillment"]').forEach((input) =>
+  input.addEventListener("change", () => {
+    const isDelivery = input.value === "Entrega" && input.checked;
+    document.querySelector("#deliveryAddressWrap").hidden = !isDelivery;
+    document.querySelector("#customerAddress").required = isDelivery;
+    if (!isDelivery) document.querySelector("#customerAddress").value = "";
+  }),
+);
+renderCategories();
+renderProducts();
+renderCart();
+const themeToggle = document.querySelector("#themeToggle");
+function setTheme(isDark) {
+  document.body.classList.toggle("dark-mode", isDark);
+  themeToggle.setAttribute(
+    "aria-label",
+    isDark ? "Ativar modo claro" : "Ativar modo escuro",
+  );
+  themeToggle.title = isDark ? "Ativar modo claro" : "Ativar modo escuro";
+  themeToggle.querySelector(".theme-label").textContent = isDark
+    ? "MODO CLARO"
+    : "MODO ESCURO";
+}
+setTheme(localStorage.getItem("pontilhao-theme") === "dark");
+themeToggle.addEventListener("click", () => {
+  const isDark = !document.body.classList.contains("dark-mode");
+  setTheme(isDark);
+  localStorage.setItem("pontilhao-theme", isDark ? "dark" : "light");
+});
