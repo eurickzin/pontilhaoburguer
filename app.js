@@ -1,158 +1,8 @@
 // Configure with the lanchonete's WhatsApp, including country and area code (digits only).
 const WHATSAPP_NUMBER = "5584988011667";
 
-const productsData = [
-  {
-    id: "bauru",
-    name: "Bauru",
-    category: "Hambúrgueres",
-    price: 9,
-    description:
-      "Pão, alface, tomate, hambúrguer industrial, queijo, presunto, ovo e molho especial.",
-    image: "assetspontilhao/bauru.png",
-  },
-  {
-    id: "x-bacon",
-    name: "X-Bacon",
-    category: "Hambúrgueres",
-    price: 13,
-    description:
-      "Pão, alface, tomate, bacon, hambúrguer industrial, queijo, presunto, ovo e molho especial.",
-    image: "assetspontilhao/xbacon.jpg",
-  },
-  {
-    id: "x-calabresa",
-    name: "X-Calabresa",
-    category: "Hambúrgueres",
-    price: 15,
-    description:
-      "Pão, alface, tomate, calabresa, hambúrguer industrial, queijo, presunto, ovo e molho especial.",
-    image: "assetspontilhao/xcalabresa.jpeg",
-  },
-  {
-    id: "x-tudo",
-    name: "X-Tudo",
-    category: "Hambúrgueres",
-    price: 15,
-    description:
-      "Pão, alface, tomate, bacon, hambúrguer industrial, queijo, presunto, ovo e molho especial.",
-    image: "assetspontilhao/xtudo.jpeg",
-  },
-  {
-    id: "torrada",
-    name: "Torrada",
-    category: "Lanches simples",
-    price: 5,
-    description: "Pão e queijo.",
-    image: "assetspontilhao/torrada.jpeg",
-  },
-  {
-    id: "misto",
-    name: "Misto",
-    category: "Lanches simples",
-    price: 5,
-    description: "Pão, queijo e presunto.",
-    image: "assetspontilhao/misto.jpeg",
-  },
-  {
-    id: "batata-frita",
-    name: "Batata frita",
-    category: "Porções",
-    price: 20,
-    description: "Porção de batata frita.",
-    image: "assetspontilhao/batatafrita.jpeg",
-  },
-  {
-    id: "coca-1l",
-    name: "Refrigerante 1L — Coca-Cola",
-    category: "Bebidas",
-    price: 9,
-    description: "Refrigerante Coca-Cola, 1 litro.",
-    image: "assetspontilhao/cocacola1litro.jpeg",
-  },
-  {
-    id: "pepsi-guarana-1l",
-    name: "Refrigerante 1L — Pepsi/Guaraná",
-    category: "Bebidas",
-    price: 8,
-    description:
-      "Escolha entre Pepsi ou Guaraná e informe a opção nas observações.",
-    image: "assetspontilhao/pepsi1litro.jpeg",
-  },
-  {
-    id: "refri-lata",
-    name: "Refrigerante lata",
-    category: "Bebidas",
-    price: 5,
-    description: "Refrigerante em lata. Informe o sabor nas observações.",
-    image: "assetspontilhao/refrigerantelata.jpeg",
-  },
-  {
-    id: "suco",
-    name: "Suco copo 300ml",
-    category: "Bebidas",
-    price: 3,
-    description: "Suco no copo de 300ml. Informe o sabor nas observações.",
-    image: "assetspontilhao/coposuco300ml.png",
-  },
-  {
-    id: "dore",
-    name: "Dore 250ml",
-    category: "Bebidas",
-    price: 3,
-    description: "Refrigerante Dore, 250ml.",
-    image: "assetspontilhao/dore250ml.jpg",
-  },
-  {
-    id: "heineken",
-    name: "Heineken long neck",
-    category: "Bebidas",
-    price: 8,
-    description: "Cerveja Heineken long neck.",
-    image: "assetspontilhao/heinekenlongnek.webp",
-  },
-  {
-    id: "budweiser",
-    name: "Budweiser long neck",
-    category: "Bebidas",
-    price: 7,
-    description: "Cerveja Budweiser long neck.",
-    image: "assetspontilhao/budweiserlongnek.webp",
-  },
-  {
-    id: "cerveja-lata",
-    name: "Cerveja lata",
-    category: "Bebidas",
-    price: 4,
-    description: "Cerveja em lata.",
-    image: "assetspontilhao/cerveja.jpeg",
-  },
-  {
-    id: "agua-gas",
-    name: "Água com gás",
-    category: "Bebidas",
-    price: 3,
-    description: "Água mineral com gás.",
-    image:
-      "https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=500&q=80",
-  },
-  {
-    id: "agua-sem-gas",
-    name: "Água sem gás",
-    category: "Bebidas",
-    price: 2,
-    description: "Água mineral sem gás.",
-    image:
-      "https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=500&q=80",
-  },
-];
-const categories = [
-  "Tudo",
-  "Hambúrgueres",
-  "Lanches simples",
-  "Porções",
-  "Bebidas",
-];
+let productsData = [];
+let categories = ["Tudo"];
 const cart = new Map();
 let activeCategory = "Tudo";
 let searchTerm = "";
@@ -160,12 +10,20 @@ const money = (value) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
     value,
   );
+const escapeHtml = (value) =>
+  String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[char]);
 const productsEl = document.querySelector("#products");
 function renderCategories() {
   document.querySelector("#categories").innerHTML = categories
     .map(
       (cat) =>
-        `<button class="cat-btn ${cat === activeCategory ? "active" : ""}" role="tab" aria-selected="${cat === activeCategory}" data-category="${cat}">${cat}</button>`,
+        `<button class="cat-btn ${cat === activeCategory ? "active" : ""}" role="tab" aria-selected="${cat === activeCategory}" data-category="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`,
     )
     .join("");
   document.querySelectorAll(".cat-btn").forEach(
@@ -180,6 +38,7 @@ function renderCategories() {
 function renderProducts() {
   const filtered = productsData.filter(
     (p) =>
+      p.active !== false &&
       (activeCategory === "Tudo" || p.category === activeCategory) &&
       `${p.name} ${p.description} ${p.category}`
         .toLowerCase()
@@ -189,7 +48,7 @@ function renderProducts() {
     ? filtered
         .map(
           (p) =>
-            `<article class="product-card">${p.badge ? `<span class="badge">${p.badge}</span>` : ""}<img class="product-photo" src="${p.image}" alt="${p.name}" loading="lazy"/><div class="product-info"><span class="product-category">${p.category}</span><h3>${p.name}</h3><p>${p.description}</p><div class="product-bottom"><span class="price">${money(p.price)}</span><button class="add-btn" aria-label="Adicionar ${p.name}" data-add="${p.id}">+</button></div></div></article>`,
+            `<article class="product-card">${p.badge ? `<span class="badge">${escapeHtml(p.badge)}</span>` : ""}<img class="product-photo" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy"/><div class="product-info"><span class="product-category">${escapeHtml(p.category)}</span><h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.description)}</p><div class="product-bottom"><span class="price">${money(p.price)}</span><button class="add-btn" aria-label="Adicionar ${escapeHtml(p.name)}" data-add="${escapeHtml(p.id)}">+</button></div></div></article>`,
         )
         .join("")
     : '<div class="no-results">Não encontramos esse item. Tente outra busca.</div>';
@@ -197,6 +56,48 @@ function renderProducts() {
     .querySelectorAll("[data-add]")
     .forEach((button) => (button.onclick = () => addItem(button.dataset.add)));
 }
+async function loadPublicMenu() {
+  productsEl.innerHTML = '<div class="no-results">Carregando cardápio...</div>';
+
+  const { data, error } = await window.supabaseClient
+    .from("produtos")
+    .select("id,nome,categoria,preco,descricao,foto_url,selo,disponivel")
+    .eq("disponivel", true)
+    .order("id");
+
+  if (error) {
+    console.error("Erro ao carregar o cardápio:", error);
+    productsData = [];
+    categories = ["Tudo"];
+    renderCategories();
+    productsEl.innerHTML =
+      '<div class="no-results">Não foi possível carregar o cardápio. Tente novamente em instantes.</div>';
+    showToast("Erro ao conectar ao cardápio.");
+    return;
+  }
+
+  productsData = (data || []).map((row) => ({
+    id: String(row.id),
+    name: row.nome,
+    category: row.categoria,
+    price: Number(row.preco),
+    description: row.descricao || "",
+    image: row.foto_url || "",
+    badge: row.selo || "",
+    active: row.disponivel,
+  }));
+
+  categories = [
+    "Tudo",
+    ...new Set(productsData.map((product) => product.category)),
+  ];
+
+  activeCategory = "Tudo";
+  renderCategories();
+  renderProducts();
+  renderCart();
+}
+
 function addItem(id) {
   const item = cart.get(id);
   cart.set(id, { qty: (item?.qty || 0) + 1 });
@@ -226,7 +127,9 @@ function renderCart() {
         const product = productsData.find((p) => p.id === id);
         total += qty * product.price;
         count += qty;
-        return `<div class="cart-row"><span class="cart-row-name">${product.name}</span><span class="cart-row-price">${money(qty * product.price)}</span><div class="cart-row-controls"><div class="qty-control"><button aria-label="Remover uma unidade de ${product.name}" data-change="${id}" data-delta="-1">−</button><span>${qty}</span><button aria-label="Adicionar uma unidade de ${product.name}" data-change="${id}" data-delta="1">+</button></div><button class="remove-item" data-remove="${id}">remover</button></div></div>`;
+        const safeId = escapeHtml(id);
+        const safeName = escapeHtml(product.name);
+        return `<div class="cart-row"><span class="cart-row-name">${safeName}</span><span class="cart-row-price">${money(qty * product.price)}</span><div class="cart-row-controls"><div class="qty-control"><button aria-label="Remover uma unidade de ${safeName}" data-change="${safeId}" data-delta="-1">−</button><span>${qty}</span><button aria-label="Adicionar uma unidade de ${safeName}" data-change="${safeId}" data-delta="1">+</button></div><button class="remove-item" data-remove="${safeId}">remover</button></div></div>`;
       })
       .join("");
   }
@@ -314,6 +217,9 @@ document.querySelector("#search").addEventListener("input", (event) => {
   searchTerm = event.target.value.trim().toLocaleLowerCase("pt-BR");
   renderProducts();
 });
+window.addEventListener("storage", (event) => {
+  if (event.key === MENU_STORAGE_KEY) window.location.reload();
+});
 document.querySelector("#checkout").addEventListener("click", sendOrder);
 const cartPanel = document.querySelector("#cartPanel");
 let cartModalTrigger = null;
@@ -361,9 +267,8 @@ document.querySelectorAll('input[name="fulfillment"]').forEach((input) =>
     if (!isDelivery) document.querySelector("#customerAddress").value = "";
   }),
 );
-renderCategories();
-renderProducts();
 renderCart();
+loadPublicMenu();
 const themeToggle = document.querySelector("#themeToggle");
 function setTheme(isDark) {
   document.body.classList.toggle("dark-mode", isDark);
@@ -382,3 +287,68 @@ themeToggle.addEventListener("click", () => {
   setTheme(isDark);
   localStorage.setItem("pontilhao-theme", isDark ? "dark" : "light");
 });
+
+const ownerDialog = document.querySelector("#ownerAccessDialog");
+const ownerForm = document.querySelector("#ownerAccessForm");
+const ownerEmail = document.querySelector("#ownerEmail");
+const ownerPassword = document.querySelector("#ownerPassword");
+const OWNER_EMAIL = "allanaraujo58917@gmail.com";
+
+async function openOwnerLogin() {
+  const { data, error } = await window.supabaseClient.auth.getSession();
+
+  if (!error && data.session) {
+    window.location.href = "admin.html";
+    return;
+  }
+
+  ownerForm.reset();
+  document.querySelector("#ownerDialogTitle").innerHTML =
+    "Área do <em>proprietário</em>";
+  document.querySelector("#ownerDialogMessage").textContent =
+    "Entre com o e-mail e a senha cadastrados pelo proprietário.";
+  document.querySelector("#ownerSubmit").textContent = "ENTRAR NO PAINEL";
+  document.querySelector("#ownerAuthError").hidden = true;
+  ownerDialog.showModal();
+  ownerEmail.focus();
+}
+
+document.querySelector("#ownerAccess").addEventListener("click", openOwnerLogin);
+document.querySelector("#closeOwnerDialog").addEventListener("click", () => ownerDialog.close());
+
+ownerForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const errorEl = document.querySelector("#ownerAuthError");
+  const submitButton = document.querySelector("#ownerSubmit");
+  errorEl.hidden = true;
+  submitButton.disabled = true;
+
+  try {
+    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+      email: ownerEmail.value.trim(),
+      password: ownerPassword.value,
+    });
+
+    if (error) throw error;
+
+    if (data.user?.email?.toLowerCase() !== OWNER_EMAIL) {
+      await window.supabaseClient.auth.signOut();
+      throw new Error("Esta conta não tem autorização para acessar o painel.");
+    }
+
+    window.location.href = "admin.html";
+  } catch (authError) {
+    errorEl.textContent =
+      authError.message === "Invalid login credentials"
+        ? "E-mail ou senha incorretos."
+        : authError.message || "Não foi possível entrar. Tente novamente.";
+    errorEl.hidden = false;
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+
+if (new URLSearchParams(window.location.search).get("admin") === "login") {
+  openOwnerLogin();
+}

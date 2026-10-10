@@ -60,6 +60,9 @@
             /></svg
           ><span class="theme-label">MODO ESCURO</span>
         </button>
+        <button class="owner-access" id="ownerAccess" type="button" aria-label="Acesso do proprietário">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0M18 8h4m-2-2v4"/></svg><span>ÁREA DO DONO</span>
+        </button>
         <button class="header-cart" id="headerCart" aria-label="Abrir sacola">
           SACOLA <span id="headerCount">0</span
           ><svg viewBox="0 0 24 24" aria-hidden="true">
@@ -344,6 +347,20 @@
       <span>COPYRIGHT 2025 PONTILHÃO BURGUER</span>
     </footer>
     <button class="cart-modal-backdrop" id="cartModalBackdrop" type="button" aria-label="Fechar sacola"></button>
+    <dialog class="owner-dialog" id="ownerAccessDialog" aria-labelledby="ownerDialogTitle">
+      <form id="ownerAccessForm">
+        <button class="owner-dialog-close" id="closeOwnerDialog" type="button" aria-label="Fechar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <span class="kicker"><i></i> ACESSO RESTRITO</span>
+        <h2 id="ownerDialogTitle">Área do <em>proprietário</em></h2>
+        <p id="ownerDialogMessage">Entre com as credenciais do proprietário para gerenciar o cardápio.</p>
+        <label for="ownerEmail">E-mail</label><input id="ownerEmail" type="email" autocomplete="username" required />
+        <label for="ownerPassword">Senha</label><input id="ownerPassword" type="password" autocomplete="current-password" required />
+        
+        <p class="owner-auth-error" id="ownerAuthError" role="alert" hidden></p>
+        <small>Acesso restrito ao proprietário.</small>
+        <button class="button button-gold owner-submit" id="ownerSubmit" type="submit">ENTRAR NO PAINEL</button>
+      </form>
+    </dialog>
     <div class="mobile-cart-bar" id="mobileCartBar">
       <span
         ><b id="mobileCount">0</b> itens
@@ -351,6 +368,10 @@
       ><button id="mobileGoCart">VER SACOLA <span><svg class="ui-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 17 10-10M8 7h9v9"/></svg></span></button>
     </div>
     <div class="toast" id="toast" role="status"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="menu-data.js"></script>
+    <script src="owner-auth.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#211E1D" />
+    <title>Painel do cardápio | Pontilhão Burguer</title>
+    <link rel="icon" type="image/png" href="logopontilhao.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+
+  <body>
+    <header class="admin-topbar">
+      <a class="admin-brand" href="index.html" aria-label="Pontilhão Burguer">
+        <img src="logopontilhao.png" alt="Pontilhão Burguer" />
+        <span>
+          PONTILHÃO <b>BURGUER</b>
+          <small>PAINEL DO CARDÁPIO</small>
+        </span>
+      </a>
+
+      <div class="admin-top-actions">
+        <a class="preview-link" href="index.html">
+          VER SITE
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m7 17 10-10M8 7h9v9" />
+          </svg>
+        </a>
+        <button class="logout-button" id="adminLogout" type="button">SAIR</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section class="admin-intro">
+        <div>
+          <span class="kicker"><i></i> ADMINISTRAÇÃO</span>
+          <h1>Seu cardápio,<br /><em>do seu jeito.</em></h1>
+          <p>Edite produtos, atualize preços e mantenha tudo em dia.</p>
+        </div>
+
+        <div class="intro-actions">
+          <button class="button button-gold" id="addProduct">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            ADICIONAR PRODUTO
+          </button>
+          <button class="button button-outline" id="exportMenu">
+            EXPORTAR CARDÁPIO
+          </button>
+        </div>
+      </section>
+
+      <div class="local-notice">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v5m0-8h.01" />
+        </svg>
+        <span>
+          As alterações do cardápio são salvas na nuvem e sincronizadas com o site.
+        </span>
+      </div>
+
+      <section class="stats" aria-label="Resumo do cardápio">
+        <article>
+          <span>PRODUTOS</span>
+          <strong id="productTotal">0</strong>
+        </article>
+        <article>
+          <span>CATEGORIAS</span>
+          <strong id="categoryTotal">0</strong>
+        </article>
+        <article>
+          <span>VISÍVEIS NO SITE</span>
+          <strong id="activeTotal">0</strong>
+        </article>
+      </section>
+
+      <section class="catalog-section">
+        <div class="catalog-heading">
+          <div>
+            <span class="kicker"><i></i> SEU CARDÁPIO</span>
+            <h2>Produtos</h2>
+          </div>
+
+          <button class="text-button" id="importMenu">
+            IMPORTAR BACKUP
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 15V3m0 0L7 8m5-5 5 5M5 14v6h14v-6" />
+            </svg>
+            <input
+              type="file"
+              id="importFile"
+              accept="application/json,.json"
+              hidden
+            />
+          </button>
+        </div>
+
+        <div class="toolbar">
+          <label class="admin-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.8" cy="10.8" r="6.8" />
+              <path d="m16 16 5 5" />
+            </svg>
+            <input
+              type="search"
+              id="productSearch"
+              placeholder="Buscar produto"
+            />
+          </label>
+
+          <select id="categoryFilter" aria-label="Filtrar por categoria">
+            <option value="">Todas as categorias</option>
+          </select>
+
+          <select id="statusFilter" aria-label="Filtrar por disponibilidade">
+            <option value="">Todos os status</option>
+            <option value="active">Visíveis</option>
+            <option value="inactive">Ocultos</option>
+          </select>
+        </div>
+
+        <div class="product-list" id="productList"></div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <strong>Nenhum produto encontrado</strong>
+          <span>Tente mudar a busca ou o filtro.</span>
+        </div>
+      </section>
+
+      <footer class="admin-footer">
+        <span>PONTILHÃO BURGUER · PAINEL DO CARDÁPIO</span>
+        <span>Cardápio sincronizado com a nuvem</span>
+      </footer>
+    </main>
+
+    <dialog
+      class="editor-dialog"
+      id="editorDialog"
+      aria-labelledby="editorTitle"
+    >
+      <form id="productForm" method="dialog">
+        <div class="dialog-heading">
+          <div>
+            <span class="kicker"><i></i> PRODUTO</span>
+            <h2 id="editorTitle">Adicionar produto</h2>
+          </div>
+
+          <button
+            class="icon-button"
+            type="button"
+            id="closeEditor"
+            aria-label="Fechar editor"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m6 6 12 12M18 6 6 18" />
+            </svg>
+          </button>
+        </div>
+
+        <input type="hidden" id="productId" />
+
+        <div class="form-layout">
+          <div class="form-main">
+            <label for="productName">Nome do produto <b>*</b></label>
+            <input
+              id="productName"
+              required
+              maxlength="80"
+              placeholder="Ex.: X-Bacon"
+            />
+
+            <div class="form-row">
+              <div>
+                <label for="productCategory">Categoria <b>*</b></label>
+                <input
+                  id="productCategory"
+                  list="categoryOptions"
+                  required
+                  maxlength="40"
+                  placeholder="Ex.: Hambúrgueres"
+                />
+                <datalist id="categoryOptions"></datalist>
+              </div>
+
+              <div>
+                <label for="productPrice">Preço <b>*</b></label>
+                <div class="price-input">
+                  <span>R$</span>
+                  <input
+                    id="productPrice"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    required
+                    placeholder="0,00"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <label for="productDescription">Descrição</label>
+            <textarea
+              id="productDescription"
+              rows="3"
+              maxlength="240"
+              placeholder="Ingredientes ou detalhes do produto"
+            ></textarea>
+
+            <label for="productBadge">
+              Selo de destaque <small>(opcional)</small>
+            </label>
+            <input
+              id="productBadge"
+              maxlength="30"
+              placeholder="Ex.: MAIS PEDIDO"
+            />
+
+            <label for="productImage">
+              Foto <small>(caminho no projeto ou URL)</small>
+            </label>
+            <input
+              id="productImage"
+              maxlength="500"
+              placeholder="assetspontilhao/foto.jpeg"
+            />
+          </div>
+
+          <div class="form-side">
+            <span class="preview-label">PRÉVIA DA FOTO</span>
+
+            <div class="image-preview">
+              <img id="imagePreview" alt="Prévia do produto" hidden />
+              <div id="imagePlaceholder">A foto aparece aqui</div>
+            </div>
+
+            <label class="availability-option">
+              <input type="checkbox" id="productActive" checked />
+              <span>
+                <b>Produto visível</b>
+                <small>Quando desligado, não aparece no site.</small>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="dialog-actions">
+          <button
+            class="button button-outline"
+            type="button"
+            id="cancelEditor"
+          >
+            CANCELAR
+          </button>
+          <button
+            class="button button-gold"
+            type="submit"
+            id="saveProduct"
+          >
+            SALVAR PRODUTO
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="admin-toast" id="adminToast" role="status"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="menu-data.js"></script>
+    <script src="owner-auth.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
