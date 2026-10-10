@@ -219,7 +219,7 @@ function renderCart() {
   const entries = [...cart.entries()];
   if (!entries.length) {
     list.innerHTML =
-      '<div class="empty-cart"><div class="empty-icon">＋</div><strong>Sua sacola tá esperando</strong><span>Escolha um lanche pra começar.</span></div>';
+      '<div class="empty-cart"><div class="empty-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div><strong>Sua sacola tá esperando</strong><span>Escolha um lanche pra começar.</span></div>';
   } else {
     list.innerHTML = entries
       .map(([id, { qty }]) => {
@@ -239,6 +239,7 @@ function renderCart() {
   document
     .querySelector("#mobileCartBar")
     .classList.toggle("visible", count > 0);
+  document.body.classList.toggle("has-mobile-cart", count > 0);
   list
     .querySelectorAll("[data-change]")
     .forEach(
@@ -290,7 +291,7 @@ function sendOrder() {
   const fulfillment = selectedFulfillment.value;
   const paymentMethod = selectedPayment.value;
   const orderNotes = document.querySelector("#orderNotes").value.trim();
-  const message = `🍔 NOVO PEDIDO - PONTILHAO BURGUER\n--------------------\n\n🧾 ITENS DO PEDIDO\n${lines.join("\n")}\n\n💰 TOTAL DOS ITENS: ${money(total)}\n--------------------\n\n👤 DADOS DO CLIENTE\nNome: ${customerName}\n${fulfillment === "Entrega" ? "📍" : "🏪"} Recebimento: ${fulfillment}${fulfillment === "Entrega" ? `\nEndereco: ${customerAddress.value.trim()}` : ""}\n💳 Pagamento: ${paymentMethod}\n📝 Observacoes: ${orderNotes || "Nenhuma"}`;
+  const message = `NOVO PEDIDO - PONTILHAO BURGUER\n--------------------\n\nITENS DO PEDIDO\n${lines.join("\n")}\n\nTOTAL DOS ITENS: ${money(total)}\n--------------------\n\nDADOS DO CLIENTE\nNome: ${customerName}\nRecebimento: ${fulfillment}${fulfillment === "Entrega" ? `\nEndereco: ${customerAddress.value.trim()}` : ""}\nPagamento: ${paymentMethod}\nObservacoes: ${orderNotes || "Nenhuma"}`;
   if (!WHATSAPP_NUMBER || WHATSAPP_NUMBER === "5585999999999") {
     showToast("Configure o número do WhatsApp da lanchonete em app.js");
     return;
